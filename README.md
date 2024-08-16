@@ -49,7 +49,7 @@ yamuxfwd -R -c localhost:80 -- ssh user@myserver -- yamuxfwd -R -l 8080
 
 hell you can even emulate `ssh -D`
 ```
-ssh user@server -- ncat -vvklp 1342 --proxy-type http &
+ssh user@server -- ncat -vvk -l 127.0.0.1 -p 1342 --proxy-type http &
 yamuxfwd -l 1342 -- ssh user@server -- yamuxfwd -c localhost:1342 &
 curl -x http://localhost:1342 https://internal-service/
 ```
