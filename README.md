@@ -47,5 +47,20 @@ given the SSH use case, reverse mode's utility is obvious
 yamuxfwd -R -c localhost:80 -- ssh user@myserver -- yamuxfwd -R -l 8080
 ```
 
+hell you can even emulate `ssh -D`
+```
+ssh user@server -- ncat -vvklp 1342 --proxy-type http &
+yamuxfwd -l 1342 -- ssh user@server -- yamuxfwd -c localhost:1342 &
+curl -x http://localhost:1342 https://internal-service/
+```
+
 ## Alternatives
 [yamux-cli](https://github.com/nwtgck/yamux-cli) Similar project. Has UDP support, but you gotta set up named pipes to complete the yamux circuit.
+
+You could also do the SSH forwarding without yamux at all, use SSH control socket (still need ncat though):
+```
+ssh -M -S /tmp/ssh-%r@%h:%p -fN user@server &
+ssh -S /tmp/ssh-%r@%h:%p user@server -- ncat -vv -l 127.0.0.1 -p 1342 --proxy-type http &
+ncat -vvklp 1342 -c 'ssh -S /tmp/ssh-%r@%h:%p user@server -- ncat -vv 127.0.0.1 1342' &
+curl -x http://localhost:1342 https://internal-service/
+```
