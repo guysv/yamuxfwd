@@ -64,3 +64,5 @@ ssh -S /tmp/ssh-%r@%h:%p user@server -- ncat -vv -l 127.0.0.1 -p 1342 --proxy-ty
 ncat -vvklp 1342 -c 'ssh -S /tmp/ssh-%r@%h:%p user@server -- ncat -vv 127.0.0.1 1342' &
 curl -x http://localhost:1342 https://internal-service/
 ```
+
+If you figure out SSH control socket reverse tunneling, please let me know 😂
