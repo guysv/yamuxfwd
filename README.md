@@ -36,14 +36,16 @@ yamuxfwd -l 8080 -- yamuxfwd -c localhost:80
 
 as the yamux peers commnicate over pipes, you can also use it via, e.g. SSH (need to upload yamuxfwd to the server first)
 ```
-# listen on 8080, forward traffic to SSH server's localhost 80 (useful when port forwarding is disabled)
+# listen on 8080, forward traffic to SSH server's localhost 80
+# (useful when port forwarding is disabled)
 yamuxfwd -l 8080 -- ssh user@myserver -- yamuxfwd -c localhost:80
 ```
 yeah. that's three levels of command nesting.
 
 given the SSH use case, reverse mode's utility is obvious
 ```
-# start yamux tunnel, listen on SSH server's 8080 port, forward reverse connection back to local machine localhost:80
+# start yamux tunnel, listen on SSH server's 8080 port
+# forward reverse connection back to local machine localhost:80
 yamuxfwd -R -c localhost:80 -- ssh user@myserver -- yamuxfwd -R -l 8080
 ```
 
@@ -55,7 +57,7 @@ curl -x http://localhost:1342 https://internal-service/
 ```
 
 ## Alternatives
-[yamux-cli](https://github.com/nwtgck/yamux-cli) Similar project. Has UDP support, but you gotta set up named pipes to complete the yamux circuit.
+[yamux-cli](https://github.com/nwtgck/yamux-cli) - Similar project. Has UDP support, but you gotta set up named pipes to complete the yamux circuit.
 
 You could also do the SSH forwarding without yamux at all, use SSH control socket (again, because -L,-R,-D are blocked. still need ncat):
 ```
