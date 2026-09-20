@@ -77,7 +77,7 @@ func connect(addr string, yamuxConn io.ReadWriteCloser) {
 		stream, err := session.Accept()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error accepting stream:", err)
-			continue
+			return
 		}
 		go func() {
 			defer stream.Close()
